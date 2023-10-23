@@ -11,16 +11,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Env variables
+db_user = os.environ.get("POSTGRES_USER", None)
+db_host = os.environ.get("POSTGRES_HOST", None)
+db_password = os.environ.get("POSTGRES_PASSWORD", None)
+db_db = os.environ.get("POSTGRES_DB", None)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@ohfr+e2y*g6%kc8#ykkqo#b5deh4q*ic4&^-=@ztt61-6et($'
+SECRET_KEY = os.environ.get("DJANGO_SECRET", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,8 +81,12 @@ WSGI_APPLICATION = 'jeps.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': db_db,
+        'USER': db_user,
+        'PASSWORD': db_password,
+        'HOST': db_host,
+        'PORT': 5432,
     }
 }
 
